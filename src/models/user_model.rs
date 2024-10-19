@@ -12,6 +12,7 @@ pub struct UserModel {
     pub updated_at: Option<NaiveDateTime>,
     pub user_type: String,
     pub status: String,
+    pub merchant_id: Option<i32>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
