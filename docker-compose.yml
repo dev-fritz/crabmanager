@@ -1,0 +1,36 @@
+version: '3'
+
+services:
+  rust:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      RUST_LOG: info
+      RUST_BACKTRACE: 1
+    depends_on: 
+      - mysql
+    volumes:
+      - ./log:/app/log
+      
+  mysql:
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: db_name
+      MYSQL_USER: db_user
+      MYSQL_PASSWORD: db_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "--silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+      
+volumes:
+  mysql:
