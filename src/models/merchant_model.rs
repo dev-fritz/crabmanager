@@ -14,3 +14,14 @@ pub struct MerchantModel {
     pub status: String,
     pub slug: String,
 }
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct CreateMerchant {
+    pub name: String,
+    pub responsible_user: i32,
+    pub phone: Option<String>,
+    pub merchant_type: String,
+    pub address: Option<String>,
+    pub status: Option<String>,
+    pub slug: Option<String>,
+}

@@ -11,3 +11,11 @@ pub struct ProductModel {
     pub merchant_id: i32,
     pub status: String,
 }
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct CreateProduct {
+    pub name: String,
+    pub description: Option<String>,
+    pub merchant_id: i32,
+    pub status: String,
+}

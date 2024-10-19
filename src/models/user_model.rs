@@ -13,3 +13,19 @@ pub struct UserModel {
     pub user_type: String,
     pub status: String,
 }
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct UserLogin {
+    pub email: String,
+    pub password: String,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct UserRegister {
+    pub name: String,
+    pub email: String,
+    pub phone: Option<String>,
+    pub password: String,
+    pub user_type: Option<String>,
+    pub status: Option<String>,
+}
