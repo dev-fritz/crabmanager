@@ -1,6 +1,6 @@
 use actix_web::{get, post, put, web, HttpResponse};
 
-use crate::models::order_item_model::{OrderItemModel, CreateOrderItem};
+use crate::models::order_item_model::CreateOrderItem;
 
 #[get("/")]
 async fn get_order_items() -> HttpResponse {

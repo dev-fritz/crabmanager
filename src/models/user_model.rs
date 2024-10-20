@@ -1,5 +1,6 @@
 use chrono::NaiveDateTime;
 use serde::{Serialize, Deserialize};
+use sqlx::prelude::FromRow;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct UserModel {
@@ -29,4 +30,16 @@ pub struct UserRegister {
     pub password: String,
     pub user_type: Option<String>,
     pub status: Option<String>,
+}
+
+#[derive(Debug, Serialize, Deserialize, FromRow)]
+pub struct UserData {
+    pub id: i32,
+    pub name: String,
+    pub email: String,
+    pub phone: Option<String>,
+    pub created_at: NaiveDateTime,
+    pub user_type: String,
+    pub status: String,
+    pub merchant_id: Option<i32>,
 }

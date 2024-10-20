@@ -11,8 +11,8 @@ use actix_web::{http::header, web, App, HttpServer};
 use dotenvy::dotenv;
 use log::{info, error};
 
-struct _AppState {
-    _db: sqlx::MySqlPool,
+struct AppState {
+    db_pool: sqlx::MySqlPool,
 }
 
 #[actix_web::main]
@@ -20,20 +20,19 @@ async fn main() -> Result<(), std::io::Error> {
     dotenv().ok();
     log4rs::init_file("log4rs.yml", Default::default()).unwrap();
 
-    info!("Logging system initialized successfully!"); // Testando se o log funciona
+    info!("Logging system initialized successfully!");
 
-    let database_url = std::env::var("DATABASE_URL").expect("DATABASE_URL must be set");
-    info!("Database URL: {}", database_url); // Log de informação
+    let database_url = std::env::var("DATABASE_URL_SLAVE").expect("DATABASE_URL_SLAVE must be set");
+    info!("Database URL: {}", database_url);
 
     let pool = match establish_connection(database_url).await {
         Ok(pool) => pool,
         Err(e) => {
-            error!("Failed to connect to database: {}", e); // Log de erro
+            error!("Failed to connect to database: {}", e);
             return Err(std::io::Error::new(std::io::ErrorKind::Other, "Failed to connect to database"));
         }
     };
 
-    // Inicializa o servidor HTTP
     HttpServer::new(move || {
         let cors = Cors::default()
             .allowed_origin("http://localhost:3000")
@@ -46,7 +45,7 @@ async fn main() -> Result<(), std::io::Error> {
             .supports_credentials();
 
         App::new()
-            .app_data(web::Data::new(_AppState { _db: pool.clone() }))
+            .app_data(web::Data::new(AppState { db_pool: pool.clone() }))
             .configure(handlers::config)
             .wrap(cors)
             .wrap(actix_web::middleware::Logger::default())

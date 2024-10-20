@@ -1,6 +1,6 @@
 use actix_web::{get, post, put, web, HttpResponse};
 
-use crate::models::transaction_model::{TransactionModel, CreateTransaction};
+use crate::models::transaction_model::CreateTransaction;
 
 #[get("/")]
 async fn get_transactions() -> HttpResponse {

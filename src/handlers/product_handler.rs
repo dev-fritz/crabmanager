@@ -1,6 +1,6 @@
 use actix_web::{get, post, put, web, HttpResponse};
 
-use crate::models::product_model::{ProductModel, CreateProduct};
+use crate::models::product_model::CreateProduct;
 
 #[get("/")]
 async fn get_products() -> HttpResponse {

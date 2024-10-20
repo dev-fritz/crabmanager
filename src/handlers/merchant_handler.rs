@@ -1,6 +1,6 @@
 use actix_web::{get, post, put, web, HttpResponse};
 
-use crate::models::merchant_model::{MerchantModel, CreateMerchant};
+use crate::models::merchant_model::CreateMerchant;
 
 #[get("/")]
 async fn get_merchants() -> HttpResponse {
