@@ -1,14 +1,13 @@
-use sqlx::MySqlPool;
 use log::error;
+use sqlx::MySqlPool;
 
-use crate::models::user_model::{UserModel, UserLogin, UserRegister, UserData};
-
+use crate::models::user_model::{UserData, UserLogin, UserRegister};
 
 pub trait UserRepository {
     async fn get_user_by_email(&self, conn: MySqlPool, email: &str) -> Result<UserData, String>;
     async fn get_user_by_id(&self, conn: MySqlPool, id: i32) -> Result<UserData, String>;
-    async fn register_user(&self, conn: MySqlPool,user: UserRegister);
-    async fn login_user(&self, conn: MySqlPool,user: UserLogin) -> Result<UserData, String>;
+    async fn register_user(&self, conn: MySqlPool, user: UserRegister);
+    async fn login_user(&self, conn: MySqlPool, user: UserLogin) -> Result<UserData, String>;
 }
 
 // Define a struct that implements the UserRepository trait
@@ -19,7 +18,6 @@ pub struct DefaultUserRepository {
 
 // Implement the UserRepository trait for the DefaultUserRepository struct
 impl UserRepository for DefaultUserRepository {
-    
     async fn get_user_by_email(&self, conn: MySqlPool, email: &str) -> Result<UserData, String> {
         let user = sqlx::query_as::<_, UserData>(
             r#"
@@ -47,8 +45,7 @@ impl UserRepository for DefaultUserRepository {
         })
     }
 
-
-    async fn get_user_by_id(&self, conn: MySqlPool,id: i32) -> Result<UserData, String> {
+    async fn get_user_by_id(&self, conn: MySqlPool, id: i32) -> Result<UserData, String> {
         let user = sqlx::query_as::<_, UserData>(
             r#"
             SELECT id, name, email, phone, password, created_at, updated_at, user_type, status, merchant_id
@@ -87,12 +84,13 @@ impl UserRepository for DefaultUserRepository {
         .bind(&user.phone)
         .bind(&user.password)
         .bind(&user.user_type)
-        .bind(&user.status).
-        fetch_optional(&conn)
-        .await.expect("Failed to insert user into database");
+        .bind(&user.status)
+        .fetch_optional(&conn)
+        .await
+        .expect("Failed to insert user into database");
     }
 
-    async fn login_user(&self, conn: MySqlPool,user: UserLogin) -> Result<UserData, String> {
+    async fn login_user(&self, conn: MySqlPool, user: UserLogin) -> Result<UserData, String> {
         let user = sqlx::query_as::<_, UserData>(
             r#"
             SELECT id, name, email, phone, created_at, user_type, status, merchant_id
@@ -120,4 +118,3 @@ impl UserRepository for DefaultUserRepository {
         })
     }
 }
-
